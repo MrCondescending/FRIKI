@@ -2,6 +2,7 @@
     User classes & helpers
     ~~~~~~~~~~~~~~~~~~~~~~
 """
+import datetime
 import os
 import json
 import binascii
@@ -40,7 +41,8 @@ class UserManager(object):
             'active': active,
             'roles': roles,
             'authentication_method': authentication_method,
-            'authenticated': False
+            'authenticated': False,
+            'last_login': "Never"
         }
         # Currently we have only two authentication_methods: cleartext and
         # hash. If we get more authentication_methods, we will need to go to a
@@ -62,6 +64,13 @@ class UserManager(object):
         if not userdata:
             return None
         return User(self, name, userdata)
+
+    def get_users(self):
+        users = self.read()
+        user_list = []
+        for user, name in enumerate(users):
+            user_list.append(User(self, name, users[name]))
+        return user_list
 
     def delete_user(self, name):
         users = self.read()

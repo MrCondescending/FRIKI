@@ -4,13 +4,15 @@
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
-    "roles": []
+    "roles": [],
+    "last_login": "12:00AM 11/07/19"
   },
   "sam": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
-    "roles": []
+    "roles": [],
+    "last_login": ""
   }
 }

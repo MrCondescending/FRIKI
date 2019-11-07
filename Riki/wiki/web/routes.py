@@ -2,6 +2,8 @@
     Routes
     ~~~~~~
 """
+import datetime
+
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -135,10 +137,13 @@ def user_login():
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
+        current_date = datetime.date.today().strftime("%H:%M%p %m/%d/%y")
         user.set('authenticated', True)
+        user.set('last_login', current_date)
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
+
 
 
 @bp.route('/user/logout/')
@@ -152,7 +157,8 @@ def user_logout():
 
 @bp.route('/user/')
 def user_index():
-    pass
+    users = current_users.get_users()
+    return render_template('user_index.html', users=users)
 
 
 @bp.route('/user/create/')
@@ -160,13 +166,21 @@ def user_create():
     pass
 
 
-@bp.route('/user/<int:user_id>/')
-def user_admin(user_id):
+@bp.route('/user/edit/<string:name>/')
+def user_admin(name):
+    return render_template('user_index.html', users=[])
     pass
 
 
-@bp.route('/user/delete/<int:user_id>/')
-def user_delete(user_id):
+@bp.route('/user/<path:name>/')
+def user_page(name):
+    user = current_users.get_user(name)
+    return render_template('user_profile.html', user=user)
+    pass
+
+
+@bp.route('/user/delete/<string:name>/')
+def user_delete(name):
     pass
 
 

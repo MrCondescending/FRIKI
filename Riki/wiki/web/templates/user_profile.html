@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}User: {{ user.name }}{% endblock title %}
+
+{% block content %}
+{% if user %}
+	<table class="table">
+		<thead>
+			<tr>
+                {% for index in user.data %}
+                    <th>{{ index }}</th>
+                {% endfor %}
+
+				<th>Last Login</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+                <tr>
+					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
+					<td><a href="{{ url_for('wiki.user_index', name=user.data.get("last_active")) }}">{{ user.name }}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>This user does not exist.</p>
+{% endif %}
+{% endblock content %}
+
+{% block sidebar %}
+<ul class="nav nav-tabs nav-stacked">
+	<li><a href="{{ url_for('wiki.create') }}">New User</a></li>
+	<li><a href="{{ url_for('wiki.tags') }}">Delete User</a></li>
+	<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
+</ul>
+{% endblock sidebar %}

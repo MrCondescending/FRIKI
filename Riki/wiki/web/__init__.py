@@ -29,6 +29,7 @@ def get_users():
 current_users = LocalProxy(get_users)
 
 
+
 def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory

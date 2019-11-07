@@ -19,6 +19,7 @@
 								<li><a href="{{ url_for('wiki.index') }}">Index</a></li>
 								<li><a href="{{ url_for('wiki.tags') }}">Tags</a></li>
 								<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
+								<li><a href="{{ url_for('wiki.user_index') }}">Users</a></li>
 								<li class="divider-vertical"></li>
 								<li><a href="{{ url_for('wiki.create') }}">New Page</a></li>
 								<li class="divider-vertical"></li>
@@ -28,7 +29,7 @@
 							<ul class="nav pull-right">
 								{% if current_user.is_authenticated %}
                                     <!-- Implement User Profile Link -->
-                                    <li><a href="">{{ current_user.name }}</a></li>
+                                    <li><a href="{{ url_for('wiki.user_page', name=current_user.name) }}">{{ current_user.name }}</a></li>
 									<li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
 								{% else %}
 									<li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
