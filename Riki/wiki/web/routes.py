@@ -16,7 +16,7 @@ from flask_login import login_user
 from flask_login import logout_user
 
 from wiki.core import Processor
-from wiki.web.forms import EditorForm
+from wiki.web.forms import EditorForm, UserCreateForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
@@ -163,20 +163,27 @@ def user_index():
 
 @bp.route('/user/create/')
 def user_create():
-    pass
+    form = UserCreateForm()
+    if form.validate_on_submit():
+        flash('Login successful.', 'success')
+        return redirect(request.args.get("next") or url_for('wiki.index'))
+    return render_template('user_create.html', form=form)
 
 
 @bp.route('/user/edit/<string:name>/')
 def user_admin(name):
-    return render_template('user_index.html', users=[])
-    pass
+    form = UserCreateForm()
+    if form.validate_on_submit():
+        flash('Login successful.', 'success')
+        return redirect(request.args.get("next") or url_for('wiki.index'))
+    return render_template('user_edit.html', form=form)
+
 
 
 @bp.route('/user/<path:name>/')
 def user_page(name):
     user = current_users.get_user(name)
     return render_template('user_profile.html', user=user)
-    pass
 
 
 @bp.route('/user/delete/<string:name>/')
