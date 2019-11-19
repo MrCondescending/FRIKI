@@ -3,9 +3,9 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": true,
+    "authenticated": false,
     "roles": [],
-    "last_login": "12:00AM 11/07/19"
+    "last_active": "12:26PM 11/19/19"
   },
   "sam": {
     "active": true,
@@ -13,6 +13,6 @@
     "password": "1234",
     "authenticated": true,
     "roles": [],
-    "last_login": ""
+    "last_active": "12:33PM 11/19/19"
   }
 }

@@ -2,8 +2,6 @@
     Routes
     ~~~~~~
 """
-import datetime
-
 from flask import Blueprint
 from flask import flash
 from flask import redirect
@@ -27,10 +25,15 @@ from wiki.web.user import protect
 
 bp = Blueprint('wiki', __name__)
 
+@bp.before_request
+def update_user_activity():
+    if current_user.is_authenticated:
+        current_user.active()
 
 @bp.route('/')
 @protect
 def home():
+    current_user.active()
     page = current_wiki.get('home')
     if page:
         return display('home')
@@ -137,9 +140,7 @@ def user_login():
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
-        current_date = datetime.date.today().strftime("%H:%M%p %m/%d/%y")
         user.set('authenticated', True)
-        user.set('last_login', current_date)
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
@@ -165,7 +166,7 @@ def user_index():
 def user_create():
     form = UserCreateForm()
     if form.validate_on_submit():
-        flash('Login successful.', 'success')
+        flash('Creation successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('user_create.html', form=form)
 

@@ -2,7 +2,7 @@
     User classes & helpers
     ~~~~~~~~~~~~~~~~~~~~~~
 """
-import datetime
+from datetime import datetime
 import os
 import json
 import binascii
@@ -42,7 +42,7 @@ class UserManager(object):
             'roles': roles,
             'authentication_method': authentication_method,
             'authenticated': False,
-            'last_login': "Never"
+            'last_active': "Never"
         }
         # Currently we have only two authentication_methods: cleartext and
         # hash. If we get more authentication_methods, we will need to go to a
@@ -109,6 +109,10 @@ class User(object):
 
     def is_anonymous(self):
         return False
+
+    def active(self):
+        current_time = datetime.now().strftime("%H:%M%p %m/%d/%y")
+        self.set('last_active', current_time)
 
     def get_id(self):
         return self.name

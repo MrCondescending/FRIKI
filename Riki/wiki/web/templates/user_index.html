@@ -8,14 +8,14 @@
 		<thead>
 			<tr>
 				<th>Users</th>
-				<th>Last Login</th>
+				<th>Last Active</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for user in users %}
                 <tr>
 					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
-					<td><a href="{{ url_for('wiki.user_index', name=user.name) }}">{{ user.get("last_login") }}</a></td>
+					<td>{{ user.get("last_active") }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>
@@ -27,7 +27,7 @@
 
 {% block sidebar %}
 <ul class="nav nav-tabs nav-stacked">
-	<li><a href="{{ url_for('wiki.create') }}">New User</a></li>
+	<li><a href="{{ url_for('wiki.user_create') }}">New User</a></li>
 	<li><a href="{{ url_for('wiki.tags') }}">Delete User</a></li>
 	<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
 </ul>
