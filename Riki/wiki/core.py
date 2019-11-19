@@ -115,7 +115,6 @@ class Processor(object):
         """
         self.html = self.md.convert(self.pre)
 
-
     def split_raw(self):
         """
             Split text into raw meta and content.
