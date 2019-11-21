@@ -83,6 +83,12 @@ def preview():
     return data['html']
 
 
+@bp.route('/user_manage/')
+@protect
+def user_manage():
+    return render_template('user_manage.html')
+
+
 @bp.route('/move/<path:url>/', methods=['GET', 'POST'])
 @protect
 def move(url):

@@ -101,8 +101,18 @@ class User(object):
     def is_anonymous(self):
         return False
 
+    def is_admin(self):
+        roles = self.get_roles()
+        if "admin" in roles:
+            return True
+        else:
+            return False
+
     def get_id(self):
         return self.name
+
+    def get_roles(self):
+        return self.data.get("roles")
 
     def check_password(self, password):
         """Return True, return False, or raise NotImplementedError if the

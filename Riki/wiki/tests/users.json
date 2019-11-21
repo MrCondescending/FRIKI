@@ -3,23 +3,24 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": true,
-    "roles": []
+    "authenticated": false,
+    "roles": [],
+    "last_active": "12:26PM 11/19/19"
   },
   "sam": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
-    "roles": []
+    "roles": [],
+    "last_active": "15:07PM 11/21/19"
   },
   "admin": {
     "active": true,
     "authentication_method": "cleartext",
-    "password": "admin",
-    "authenticated": false,
-    "roles": [
-      "admin"
-    ]
+    "password": "1234",
+    "authenticated": true,
+    "roles": ["admin"],
+    "last_active": "15:07PM 11/21/19"
   }
 }
