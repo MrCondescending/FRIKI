@@ -158,7 +158,7 @@ def user_logout():
 
 @bp.route('/user/')
 def user_index():
-    users = current_users.get_users()
+    users = current_users.get_all_users()
     return render_template('user_index.html', users=users)
 
 

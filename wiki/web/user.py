@@ -65,7 +65,7 @@ class UserManager(object):
             return None
         return User(self, name, userdata)
 
-    def get_users(self):
+    def get_all_users(self):
         users = self.read()
         user_list = []
         for user, name in enumerate(users):
