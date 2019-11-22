@@ -1,3 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}User Management{% endblock title %}
+
+{% block content %}
+    {% if current_user.admin %}
+       {% if option_needed is sameas True and selected is not sameas True%}
+           <form>
+                <h3>Select a User Management Option:</h3>
+                {{ form.management_option }}
+                <br>
+                <button type="submit">Continue To Form</button>
+           </form>
+       {% endif %}
+    {% endif %}
+{% endblock %}

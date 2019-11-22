@@ -23,7 +23,7 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-
+import forms
 
 bp = Blueprint('wiki', __name__)
 
@@ -85,7 +85,7 @@ def preview():
     return data['html']
 
 
-@bp.route('/user_manage/')
+@bp.route('/user/user_manage/')
 @protect
 def user_manage():
     return render_template('user_manage.html')
@@ -174,6 +174,15 @@ def user_create():
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('user_create.html', form=form)
+
+
+@bp.route('/user_manage/', methods=['', 'GET'])
+def management_option():
+    form = forms.UserManagementForm()
+    if request.method == 'GET':
+        return render_template('user_manage.html', form=form, selected=True)
+    else:
+        return render_template('user_manage.html', form=form, option_needed=True)
 
 
 @bp.route('/user/edit/<string:name>/')

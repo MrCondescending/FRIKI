@@ -3,8 +3,9 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": true,
-    "roles": []
+    "authenticated": false,
+    "roles": [],
+    "last_login": "00:00AM 11/21/19"
   },
   "sam": {
     "active": true,
@@ -17,9 +18,10 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "admin",
-    "authenticated": false,
+    "authenticated": true,
     "roles": [
       "admin"
-    ]
+    ],
+    "last_login": "00:00AM 1/1/70"
   }
 }

@@ -29,7 +29,6 @@ def get_users():
 current_users = LocalProxy(get_users)
 
 
-
 def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
@@ -49,6 +48,13 @@ def create_app(directory):
 
     return app
 
+
+def is_admin(current_user):
+    return UserManager(current_app.config['USER_DIR']).get_user(current_user.name).is_admin()
+
+
+app = Flask(__name__)
+app.jinja_env.globals.update(is_admin=is_admin)
 
 loginmanager = LoginManager()
 loginmanager.login_view = 'wiki.user_login'

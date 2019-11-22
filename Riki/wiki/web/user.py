@@ -90,6 +90,7 @@ class User(object):
         self.manager = manager
         self.name = name
         self.data = data
+        self.admin = self.is_admin()
 
     def get(self, option):
         return self.data.get(option)
