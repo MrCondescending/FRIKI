@@ -86,12 +86,6 @@ def preview():
     return data['html']
 
 
-@bp.route('/user/user_manage/')
-@protect
-def user_manage():
-    return render_template('user_manage.html')
-
-
 @bp.route('/move/<path:url>/', methods=['GET', 'POST'])
 @protect
 def move(url):
@@ -180,20 +174,28 @@ def user_create():
 @bp.route('/user_manage/create/', methods=['POST'])
 def user_manage_create():
     user_manager = user.UserManager(current_app.config['USER_DIR'])
-    user_manager.add_user(name=request.args.get('name'), password=request.args.get('password'))
-    form = forms.UserManagementForm()
-    return render_template('user_manage.html', form=form, option_needed=True, request_completed=True, selected=False)
+    is_admin = ['admin'] if request.form.get('is_admin') else ['']
+    user_manager.add_user(name=request.form.get('name'), password=request.form.get('password'), roles=is_admin, )
+    return render_template('request_completed.html')
 
 
 @bp.route('/user_manage/', methods=['', 'GET'])
 def management_option():
     form = forms.UserManagementForm()
+    option = request.args.get('management_option')
+
     if request.method == 'GET':
+        user_modify_form = forms.UserCreateForm()
         if request.args.get('management_option') is None:
             return render_template('user_manage.html', form=form, option_needed=True, selected=False)
-        else:
-            user_create_form = forms.UserCreateForm()
-            return render_template('user_manage.html', form=user_create_form, selected=True, option_needed=False)
+        elif option == 'add_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+        elif option == 'edit_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+        elif option == 'delete_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+    else:
+        return render_template('user_manage.html', form=form, option_needed=True, selected=False)
 
 
 @bp.route('/user/edit/<string:name>/')

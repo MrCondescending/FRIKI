@@ -63,7 +63,7 @@ class UserCreateForm(Form):
     name = TextField('', [InputRequired()])
     password = PasswordField('', [InputRequired()])
     confirm_password = PasswordField('', [InputRequired()])
-
+    is_admin = BooleanField()
 
     def validate_name(form, field):
         user = current_users.get_user(field.data)

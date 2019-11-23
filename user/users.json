@@ -12,7 +12,8 @@
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
-    "roles": []
+    "roles": [],
+    "last_login": "00:00AM 11/21/19"
   },
   "admin": {
     "active": true,
@@ -23,5 +24,15 @@
       "admin"
     ],
     "last_login": "00:00AM 11/22/19"
+  },
+  "test": {
+    "active": true,
+    "roles": [
+      ""
+    ],
+    "authentication_method": "cleartext",
+    "authenticated": false,
+    "last_login": "Never",
+    "password": "test"
   }
 }

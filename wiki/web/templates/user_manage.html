@@ -22,9 +22,35 @@
                    <br>
                    <h6>Confirm Password: </h6> {{ form.confirm_password() }}
                    <br>
+                   <h6>Add Admin Role: </h6> {{ form.is_admin() }}
+                   <br>
+                   <br>
                    <input type="submit" class="btn btn-primary" value="Add User">
                </form>
-
+           {% elif request.args.get('management_option') == "edit_user" %}
+               <form action="/user_manage/edit/" method="POST">
+                   <h3>Edit User</h3>
+                   <br>
+                   <h6>Username: </h6> {{ form.name() }}
+                   <br>
+                   <h6>Password: </h6> {{ form.password() }}
+                   <br>
+                   <h6>Confirm Password: </h6> {{ form.confirm_password() }}
+                   <br>
+                   <h6>Add Admin Role: </h6> {{ form.is_admin() }}
+                   <br>
+                   <br>
+                   <input type="submit" class="btn btn-primary" value="Edit User">
+               </form>
+           {% else %}
+               <form action="/user_manage/delete/" method="POST">
+                   <h3>Delete User</h3>
+                   <br>
+                   <h6>Username: </h6> {{ form.name() }}
+                   <br>
+                   <br>
+                   <input type="submit" class="btn btn-primary" value="Delete User">
+               </form>
            {% endif %}
        {% endif %}
     {% endif %}
