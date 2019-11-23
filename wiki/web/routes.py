@@ -18,6 +18,7 @@ from wiki.web.forms import EditorForm, UserCreateForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
+from wiki.web.forms import TagForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
@@ -51,7 +52,10 @@ def index():
 @protect
 def display(url):
     page = current_wiki.get_or_404(url)
-    return render_template('page.html', page=page)
+    form = TagForm()
+    if form.validate_on_submit():
+        return None
+    return render_template('page.html', page=page, form=form)
 
 
 @bp.route('/create/', methods=['GET', 'POST'])
