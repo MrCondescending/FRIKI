@@ -4,7 +4,7 @@
 """
 import datetime
 
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -24,6 +24,7 @@ from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
 import forms
+import user
 
 bp = Blueprint('wiki', __name__)
 
@@ -176,13 +177,23 @@ def user_create():
     return render_template('user_create.html', form=form)
 
 
+@bp.route('/user_manage/create/', methods=['POST'])
+def user_manage_create():
+    user_manager = user.UserManager(current_app.config['USER_DIR'])
+    user_manager.add_user(name=request.args.get('name'), password=request.args.get('password'))
+    form = forms.UserManagementForm()
+    return render_template('user_manage.html', form=form, option_needed=True, request_completed=True, selected=False)
+
+
 @bp.route('/user_manage/', methods=['', 'GET'])
 def management_option():
     form = forms.UserManagementForm()
     if request.method == 'GET':
-        return render_template('user_manage.html', form=form, selected=True)
-    else:
-        return render_template('user_manage.html', form=form, option_needed=True)
+        if request.args.get('management_option') is None:
+            return render_template('user_manage.html', form=form, option_needed=True, selected=False)
+        else:
+            user_create_form = forms.UserCreateForm()
+            return render_template('user_manage.html', form=user_create_form, selected=True, option_needed=False)
 
 
 @bp.route('/user/edit/<string:name>/')

@@ -11,6 +11,21 @@
                 <br>
                 <button type="submit">Continue To Form</button>
            </form>
+       {% elif selected is sameas True %}
+           {% if request.args.get('management_option') == "add_user" %}
+               <form action="/user_manage/create/" method="POST">
+                   <h3>Add User</h3>
+                   <br>
+                   <h6>Username: </h6> {{ form.name() }}
+                   <br>
+                   <h6>Password: </h6> {{ form.password() }}
+                   <br>
+                   <h6>Confirm Password: </h6> {{ form.confirm_password() }}
+                   <br>
+                   <input type="submit" class="btn btn-primary" value="Add User">
+               </form>
+
+           {% endif %}
        {% endif %}
     {% endif %}
 {% endblock %}
