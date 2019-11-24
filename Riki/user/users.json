@@ -5,9 +5,30 @@
     "password": "1234",
     "authenticated": true,
     "roles": [],
-    "last_login": "12:00AM 11/07/19"
+    "last_login": "00:00AM 11/23/19"
   },
   "sam": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [
+      "Admin"
+    ],
+    "last_login": ""
+  },
+  "IamSam": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [
+      "Admin",
+      "test"
+    ],
+    "last_login": ""
+  },
+  "rest": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",

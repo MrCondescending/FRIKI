@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if search %}
+	Results for "{{ search }}"
+{% else %}
+	Advanced Search
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="row">
+	<div class="span8 offset1">
+		<form class="form-inline well" method="POST">
+			{{ form.hidden_tag() }}
+			{{ form.term(placeholder='Search.. (regex accepted)', autocomplete="off") }}
+            {{ form.ignore_case() }} Ignore Case
+            <tr><td><input type="checkbox" name="options" id="tags" value="tags" onClick="cChange(this)">Tags</td></tr>
+            <tr><td><input type="checkbox" name="options" id="users" value="users" onClick="cChange(this)">Users</td></tr>
+            <tr><td><input type="checkbox" name="options" id="roles" value="roles" onClick="cChange(this)">Roles</td></tr>
+
+            <script>
+                function cChange(cType){
+                    let name = document.getElementsByName(cType.name);
+                    let checked = document.getElementById(cType.id);
+                    if (checked.checked) {
+                        for(let i=0; i < name.length; i++){
+                            if(!name[i].checked){
+                                name[i].disabled = true;
+                            }else{
+                                name[i].disabled = false;
+                            }
+                        }
+                    }
+                    else {
+                        for(let i=0; i < name.length; i++){
+                            name[i].disabled = false;
+                        }
+                    }
+                }
+            </script>
+
+			<input type="submit" class="btn btn-success pull-right" value="Search!">
+		</form>
+	</div>
+</div>
+{% if error %}
+    Invalid Regex!
+{% endif %}
+
+{% if search %}
+    {% if users %}
+	    <table class="table">
+		<thead>
+			<tr>
+				<th>Users</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+                <tr>
+					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+    {% elif roles %}
+	    <table class="table">
+		<thead>
+			<tr>
+				<th>Roles</th>
+                <th>User</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for k, v in roles.items() %}
+                <tr>
+                    <td>{{ ', '.join(roles[k]) }}</td>
+                    <td><a href="{{ url_for('wiki.user_page', name=k) }}">{{ k }}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% elif results %}
+		<ul>
+			{% for result in results %}
+				<li><a href="{{ url_for('wiki.display', url=result.url) }}">{{ result.title }}</a></li>
+			{% endfor %}
+		</ul>
+    {% elif tags %}
+	    <table class="table">
+		<thead>
+			<tr>
+				<th>Tag</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for tag in tags %}
+				<tr>
+					<td><a href="{{ url_for('wiki.tag', name=tag) }}">{{ tag }}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+		<p>No results for your search.</p>
+	{% endif %}
+{% endif %}
+{% endblock content %}

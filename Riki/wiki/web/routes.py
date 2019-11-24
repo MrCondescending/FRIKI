@@ -3,6 +3,7 @@
     ~~~~~~
 """
 import datetime
+import re
 
 from flask import Blueprint
 from flask import flash
@@ -131,6 +132,57 @@ def search():
     return render_template('search.html', form=form, search=None)
 
 
+@bp.route('/search/filter/', methods=['GET', 'POST'])
+@protect
+def advanced_search():
+    form = SearchForm()
+    if form.validate_on_submit():
+        try:
+            re.compile(".*" + form.term.data, re.IGNORECASE)
+        except re.error:
+            return render_template('advanced_search.html', form=form, search=None, error=True)
+        if request.form.get('options') == "users":
+            users = current_users.get_users()
+            user = []
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in users:
+                if re.search(pattern, x.name) is not None:
+                    user.append(x)
+            return render_template('advanced_search.html', form=form, users=user, search=form.term.data)
+        elif request.form.get('options') == "tags":
+            tags = current_wiki.get_tags()
+            tag = []
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in tags:
+                if re.search(pattern, x) is not None:
+                    tag.append(x)
+            return render_template('advanced_search.html', form=form, tags=tag, search=form.term.data)
+        elif request.form.get('options') == "roles":
+            users = current_users.get_users()
+            roles = {}
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in users:
+                user_roles = x.get('roles')
+                for y in range(len(user_roles)):
+                    if re.search(pattern, user_roles[y]) is not None:
+                        roles.setdefault(x.name, [])
+                        roles[x.name].append(user_roles[y])
+            return render_template('advanced_search.html', form=form, search=form.term.data, roles=roles)
+        results = current_wiki.search(form.term.data, form.ignore_case.data)
+        return render_template('advanced_search.html', form=form,
+                               results=results, search=form.term.data)
+    return render_template('advanced_search.html', form=form, search=None)
+
+
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
@@ -143,7 +195,6 @@ def user_login():
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
-
 
 
 @bp.route('/user/logout/')
@@ -177,7 +228,6 @@ def user_admin(name):
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('user_edit.html', form=form)
-
 
 
 @bp.route('/user/<path:name>/')
