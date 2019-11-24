@@ -192,20 +192,18 @@ def user_manage_create():
 @bp.route('/user_manage/edit/', methods=['POST'])
 def user_manage_edit():
     user_manager = user.UserManager(current_app.config['USER_DIR'])
-    user_found = False
+    user_found = True
     password_mismatch = False
     is_admin = True if request.form.get('is_admin') else False
 
     if user_manager.get_user(request.form.get('name')) is None:
-        user_found = True
+        user_found = False
         flash('Username not found, please try again', 'error')
     if request.form.get('password') != request.form.get('confirm_password'):
         password_mismatch = True
         flash('Those passwords didn\'t match, please try again', 'error')
     if user_found is True and password_mismatch is False:
-        user_manager.edit_user(user_manager.get_user(request.form.get('name')),
-                               user_manager.get_user(request.form.get('password')),
-                               is_admin)
+        user_manager.edit_user(request.form.get('name'), request.form.get('password'), is_admin)
     return render_template('request_completed.html')
 
 

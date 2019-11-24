@@ -61,14 +61,16 @@ class UserManager(object):
     def edit_user(self, name, password, is_admin):
         data = self.read()
         edited_user = self.get_user(name)
+        counter = 0
         if password != '':
             edited_user.set('password', password)
         if edited_user.is_admin() and is_admin is False:
             roles = edited_user.get('roles')
             for role in roles:
                 if role == 'admin':
-                    roles.pop(role)
+                    roles.pop(counter)
                     edited_user.set('roles', roles)
+                counter += 1
         if edited_user.is_admin() is False and is_admin is True:
             roles = edited_user.get('roles')
             roles.append('admin')
