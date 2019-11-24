@@ -4,6 +4,7 @@
 	{{ page.title }}
 {% endblock title %}
 
+
 {% block content %}
   <div id="confirmDelete" class="modal hide fade" aria-hidden="true">
     <div class="modal-header">
@@ -21,6 +22,10 @@
 {% endblock content %}
 
 {% block sidebar %}
+    <form method="post" class="form-inline" >
+        <input style="width:300px;" id = "newTags" name="newTags" requiredtype="text" value="{{page.tags}}" data-role="tagsinput" placeholder="Add Tag (Enter to save)" />
+        <button style="display:none; vertical-align: middle;" class="btn btn-info" type="submit">Add Tag</button>
+    </form>
 {% if page.tags %}
 <h3>Tags</h3>
   <ul>
@@ -37,7 +42,7 @@
 </ul>
 <div>
     <form method="post" class="form-inline" >
-        {{ form.tags(placeholder="Tags (comma separated)", style="width:170px; display:inline-block; vertical-align: middle;") }}
+        {{ form.newTags(placeholder="Tags (comma separated)", style="width:170px; display:inline-block; vertical-align: middle;") }}
         <button style="display:inline-block; vertical-align: middle;" class="btn btn-info" type="submit">Add Tag</button>
     </form>
 </div>

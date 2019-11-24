@@ -1,5 +1,4 @@
 title: Main
 tags: interesting
 
-World
-[[hello|abc]] [[world|world]]
+Welcome Blah Blah

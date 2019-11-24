@@ -31,7 +31,7 @@ def update_user_activity():
     if current_user.is_authenticated:
         current_user.active()
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @protect
 def home():
     current_user.active()
@@ -48,13 +48,23 @@ def index():
     return render_template('index.html', pages=pages)
 
 
-@bp.route('/<path:url>/')
+@bp.route('/<path:url>/', methods=['GET', 'POST'])
 @protect
 def display(url):
     page = current_wiki.get_or_404(url)
-    form = TagForm()
-    if form.validate_on_submit():
-        return None
+    form = TagForm(obj=page)
+
+    if request.method =="POST":
+        newTags = request.form['newTags']
+
+        if page.tags == '':
+            page.tags = newTags
+        else:
+            page.tags = page.tags + ","+ newTags
+        page.tags = newTags
+        page.save()
+        return redirect(url_for('wiki.display', url=url))
+
     return render_template('page.html', page=page, form=form)
 
 

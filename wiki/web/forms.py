@@ -40,7 +40,7 @@ class EditorForm(Form):
     tags = TextField('')
 
 class TagForm(Form):
-    tags = TextField('', [InputRequired()])
+    newTags = TextField('', [InputRequired()])
 
 class LoginForm(Form):
     name = TextField('', [InputRequired()])
