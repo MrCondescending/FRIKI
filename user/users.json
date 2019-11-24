@@ -24,15 +24,5 @@
       "admin"
     ],
     "last_login": "00:00AM 11/22/19"
-  },
-  "test": {
-    "active": true,
-    "roles": [
-      ""
-    ],
-    "authentication_method": "cleartext",
-    "authenticated": false,
-    "last_login": "Never",
-    "password": "test"
   }
 }

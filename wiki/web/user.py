@@ -58,6 +58,24 @@ class UserManager(object):
         userdata = users.get(name)
         return User(self, name, userdata)
 
+    def edit_user(self, name, password, is_admin):
+        data = self.read()
+        edited_user = self.get_user(name)
+        if password != '':
+            edited_user.set('password', password)
+        if edited_user.is_admin() and is_admin is False:
+            roles = edited_user.get('roles')
+            for role in roles:
+                if role == 'admin':
+                    roles.pop(role)
+                    edited_user.set('roles', roles)
+        if edited_user.is_admin() is False and is_admin is True:
+            roles = edited_user.get('roles')
+            roles.append('admin')
+            edited_user.set('roles', roles)
+        data[name] = edited_user.data
+        self.write(data)
+
     def get_user(self, name):
         users = self.read()
         userdata = users.get(name)

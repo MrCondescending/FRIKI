@@ -82,8 +82,11 @@ class UserManagementForm(Form):
     management_option = SelectField('Select an Option', choices=[('add_user', 'Add a User Account'),
                                                                  ('edit_user', 'Edit a User Account'),
                                                                  ('delete_user', 'Delete a User Account')])
-    username = StringField('', [InputRequired()])
-    active = SelectField("Is User Active?", choices=[('true', 'Yes'), ('false', 'False')])
-    password = PasswordField('', [InputRequired()])
-    confirm_password = PasswordField('', [InputRequired()])
-    roles = StringField("Add Roles")
+    def invalid_name(self):
+        raise ValidationError('This username does not exist.')
+    # REMOVED AND USED THE UserCreateForm
+    # username = StringField('', [InputRequired()])
+    # active = SelectField("Is User Active?", choices=[('true', 'Yes'), ('false', 'False')])
+    # password = PasswordField('', [InputRequired()])
+    # confirm_password = PasswordField('', [InputRequired()])
+    # roles = StringField("Add Roles")
