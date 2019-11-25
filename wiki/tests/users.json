@@ -10,7 +10,7 @@
   "sam": {
     "active": true,
     "authentication_method": "cleartext",
-    "password": "1234",
+    "password": "password",
     "authenticated": true,
     "roles": [],
     "last_active": "15:07PM 11/21/19"
@@ -20,7 +20,9 @@
     "authentication_method": "cleartext",
     "password": "1234",
     "authenticated": true,
-    "roles": ["admin"],
+    "roles": [
+      "admin"
+    ],
     "last_active": "15:07PM 11/21/19"
   }
 }
