@@ -5,8 +5,10 @@
 from flask_wtf import Form
 from wtforms import BooleanField
 from wtforms import TextField
+from wtforms import SelectField
 from wtforms import TextAreaField
 from wtforms import PasswordField
+from wtforms import StringField
 from wtforms.validators import InputRequired
 from wtforms.validators import ValidationError
 
@@ -61,7 +63,7 @@ class UserCreateForm(Form):
     name = TextField('', [InputRequired()])
     password = PasswordField('', [InputRequired()])
     confirm_password = PasswordField('', [InputRequired()])
-
+    is_admin = BooleanField()
 
     def validate_name(form, field):
         user = current_users.get_user(field.data)
@@ -74,3 +76,17 @@ class UserCreateForm(Form):
             return
         if not user.check_password(field.data):
             raise ValidationError('Username and password do not match.')
+
+
+class UserManagementForm(Form):
+    management_option = SelectField('Select an Option', choices=[('add_user', 'Add a User Account'),
+                                                                 ('edit_user', 'Edit a User Account'),
+                                                                 ('delete_user', 'Delete a User Account')])
+    def invalid_name(self):
+        raise ValidationError('This username does not exist.')
+    # REMOVED AND USED THE UserCreateForm
+    # username = StringField('', [InputRequired()])
+    # active = SelectField("Is User Active?", choices=[('true', 'Yes'), ('false', 'False')])
+    # password = PasswordField('', [InputRequired()])
+    # confirm_password = PasswordField('', [InputRequired()])
+    # roles = StringField("Add Roles")

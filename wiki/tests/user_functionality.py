@@ -8,7 +8,7 @@ class TestGetAllUsers(unittest.TestCase):
         self.usr_mngr = user.UserManager("")
 
     def test_all_users_exist(self):
-        self.assertTrue(self.usr_mngr.get_all_users(), 2)
+        self.assertTrue(self.usr_mngr.get_all_users(), 3)
 
     def test_get_last_active(self):
         self.assertTrue(self.usr_mngr.get_user("sam").get("last_active"), "15:07PM 11/21/19")

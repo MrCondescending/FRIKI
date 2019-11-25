@@ -5,14 +5,24 @@
     "password": "1234",
     "authenticated": false,
     "roles": [],
-    "last_active": "16:59PM 11/21/19"
+    "last_active": "11:54AM 11/25/19"
   },
   "sam": {
     "active": true,
     "authentication_method": "cleartext",
-    "password": "1234",
+    "password": "password",
     "authenticated": true,
     "roles": [],
+    "last_active": "15:07PM 11/21/19"
+  },
+  "admin": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [
+      "admin"
+    ],
     "last_active": "15:07PM 11/21/19"
   }
 }
