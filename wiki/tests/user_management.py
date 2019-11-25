@@ -4,7 +4,7 @@ import user
 
 class MyTestCase(unittest.TestCase):
     def setUp(self):
-        self.usr_mng = user.UserManager('/home/devin/Documents/My Repos/FRIKI/wiki/tests/')
+        self.usr_mng = user.UserManager('../tests/')
 
     def test_if_admin_return_true(self):
         new_usr = self.usr_mng.get_user("admin")

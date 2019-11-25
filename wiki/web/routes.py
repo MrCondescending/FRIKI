@@ -23,7 +23,10 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-import forms
+try:
+    import forms
+except:
+    from . import forms
 import user
 
 bp = Blueprint('wiki', __name__)
