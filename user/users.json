@@ -5,7 +5,7 @@
     "password": "1234",
     "authenticated": false,
     "roles": [],
-    "last_login": "00:00AM 11/21/19"
+    "last_active": "04:50PM 11/25/19"
   },
   "sam": {
     "active": true,
@@ -13,7 +13,7 @@
     "password": "1234",
     "authenticated": true,
     "roles": [],
-    "last_login": "00:00AM 11/21/19"
+    "last_active": "00:00AM 11/21/19"
   },
   "admin": {
     "active": true,
@@ -23,6 +23,6 @@
     "roles": [
       "admin"
     ],
-    "last_login": "00:00AM 11/22/19"
+    "last_active": "04:55PM 11/25/19"
   }
 }

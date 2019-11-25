@@ -1,26 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}User: {{ user.name }}{% endblock title %}
+{% block title %}{{ user.name }}'s Profile{% endblock title %}
 
 {% block content %}
 {% if user %}
 	<table class="table">
 		<thead>
 			<tr>
-                {% for index in user.data %}
-                    <th>{{ index }}</th>
-                {% endfor %}
-
-				<th>Last Active</th>
+                <th>Name</th>
+                <th>Roles</th>
+				<th>Last Login</th>
 			</tr>
 		</thead>
 		<tbody>
-			{% for user in users %}
-                <tr>
-					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
-					<td><a href="{{ url_for('wiki.user_index', name=user.data.get("last_active")) }}">{{ user.name }}</a></td>
-				</tr>
-			{% endfor %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.data.roles }}</td>
+                <td>{{ user.data.last_active }}</td>
+
+            </tr>
 		</tbody>
 	</table>
 {% else %}
@@ -28,10 +26,13 @@
 {% endif %}
 {% endblock content %}
 
-{% block sidebar %}
-<ul class="nav nav-tabs nav-stacked">
-	<li><a href="{{ url_for('wiki.create') }}">New User</a></li>
-	<li><a href="{{ url_for('wiki.tags') }}">Delete User</a></li>
-	<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
-</ul>
-{% endblock sidebar %}
+
+    {% block sidebar %}
+        {% if current_user.admin %}
+            <ul class="nav nav-tabs nav-stacked">
+                <li><a href="{{ url_for('wiki.management_option', management_option='edit_user') }}">Edit User</a></li>
+                <li><a href="{{ url_for('wiki.management_option', management_option='delete_user') }}" class="text-error">Delete User</a></li>
+
+            </ul>
+        {% endif %}
+    {% endblock sidebar %}

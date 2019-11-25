@@ -8,6 +8,7 @@
 		<thead>
 			<tr>
 				<th>Users</th>
+                <th>Roles</th>
 				<th>Last Active</th>
 			</tr>
 		</thead>
@@ -15,6 +16,7 @@
 			{% for user in users %}
                 <tr>
 					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
+                    <td>{{ user.get_roles() }}</td>
 					<td>{{ user.get("last_active") }}</td>
 				</tr>
 			{% endfor %}
@@ -25,10 +27,4 @@
 {% endif %}
 {% endblock content %}
 
-{% block sidebar %}
-<ul class="nav nav-tabs nav-stacked">
-	<li><a href="{{ url_for('wiki.user_create') }}">New User</a></li>
-	<li><a href="{{ url_for('wiki.tags') }}">Delete User</a></li>
-	<li><a href="{{ url_for('wiki.search') }}">Search</a></li>
-</ul>
-{% endblock sidebar %}
+
