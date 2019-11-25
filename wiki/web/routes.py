@@ -2,7 +2,9 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+import datetime
+
+from flask import Blueprint, current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -21,19 +23,18 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
-
+try:
+    import forms
+except:
+    from . import forms
+import user
 
 bp = Blueprint('wiki', __name__)
 
-@bp.before_request
-def update_user_activity():
-    if current_user.is_authenticated:
-        current_user.active()
 
 @bp.route('/')
 @protect
 def home():
-    current_user.active()
     page = current_wiki.get('home')
     if page:
         return display('home')
@@ -140,7 +141,9 @@ def user_login():
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
+        current_date = datetime.date.today().strftime("%H:%M%p %m/%d/%y")
         user.set('authenticated', True)
+        user.set('last_login', current_date)
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
@@ -166,9 +169,75 @@ def user_index():
 def user_create():
     form = UserCreateForm()
     if form.validate_on_submit():
-        flash('Creation successful.', 'success')
+        flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('user_create.html', form=form)
+
+
+@bp.route('/user_manage/create/', methods=['POST'])
+def user_manage_create():
+    user_manager = user.UserManager(current_app.config['USER_DIR'])
+    user_found = False
+    password_mismatch = False
+    is_admin = ['admin'] if request.form.get('is_admin') else ['']
+
+    if user_manager.get_user(request.form.get('name')) is not None:
+        user_found = True
+        flash('Username was taken, please try again.', 'error')
+    if request.form.get('password') != request.form.get('confirm_password'):
+        password_mismatch = True
+        flash('Those passwords didn\'t match, please try again', 'error')
+    if user_found is False and password_mismatch is False:
+        user_manager.add_user(name=request.form.get('name'), password=request.form.get('password'), roles=is_admin)
+    return render_template('request_completed.html')
+
+
+@bp.route('/user_manage/edit/', methods=['POST'])
+def user_manage_edit():
+    user_manager = user.UserManager(current_app.config['USER_DIR'])
+    user_found = True
+    password_mismatch = False
+    is_admin = True if request.form.get('is_admin') else False
+
+    if user_manager.get_user(request.form.get('name')) is None:
+        user_found = False
+        flash('Username not found, please try again', 'error')
+    if request.form.get('password') != request.form.get('confirm_password'):
+        password_mismatch = True
+        flash('Those passwords didn\'t match, please try again', 'error')
+    if user_found is True and password_mismatch is False:
+        user_manager.edit_user(request.form.get('name'), request.form.get('password'), is_admin)
+    return render_template('request_completed.html')
+
+
+@bp.route('/user_manage/delete/', methods=['POST'])
+def user_manage_delete():
+    user_manager = user.UserManager(current_app.config['USER_DIR'])
+    user_found = False
+    if user_manager.get_user(request.form.get('name')) is None:
+        user_found = True
+        flash('Username not found, please try again', 'error')
+    else:
+        user_manager.delete_user(request.form.get('name'))
+    return render_template('request_completed.html')
+
+@bp.route('/user_manage/', methods=['', 'GET'])
+def management_option():
+    form = forms.UserManagementForm()
+    option = request.args.get('management_option')
+
+    if request.method == 'GET':
+        user_modify_form = forms.UserCreateForm()
+        if request.args.get('management_option') is None:
+            return render_template('user_manage.html', form=form, option_needed=True, selected=False)
+        elif option == 'add_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+        elif option == 'edit_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+        elif option == 'delete_user':
+            return render_template('user_manage.html', form=user_modify_form, selected=True, option_needed=False)
+    else:
+        return render_template('user_manage.html', form=form, option_needed=True, selected=False)
 
 
 @bp.route('/user/edit/<string:name>/')
@@ -178,7 +247,6 @@ def user_admin(name):
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('user_edit.html', form=form)
-
 
 
 @bp.route('/user/<path:name>/')

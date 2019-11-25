@@ -2,7 +2,7 @@
     User classes & helpers
     ~~~~~~~~~~~~~~~~~~~~~~
 """
-from datetime import datetime
+import datetime
 import os
 import json
 import binascii
@@ -42,7 +42,7 @@ class UserManager(object):
             'roles': roles,
             'authentication_method': authentication_method,
             'authenticated': False,
-            'last_active': "Never"
+            'last_login': "Never"
         }
         # Currently we have only two authentication_methods: cleartext and
         # hash. If we get more authentication_methods, we will need to go to a
@@ -57,6 +57,26 @@ class UserManager(object):
         self.write(users)
         userdata = users.get(name)
         return User(self, name, userdata)
+
+    def edit_user(self, name, password, is_admin):
+        data = self.read()
+        edited_user = self.get_user(name)
+        counter = 0
+        if password != '':
+            edited_user.set('password', password)
+        if edited_user.is_admin() and is_admin is False:
+            roles = edited_user.get('roles')
+            for role in roles:
+                if role == 'admin':
+                    roles.pop(counter)
+                    edited_user.set('roles', roles)
+                counter += 1
+        if edited_user.is_admin() is False and is_admin is True:
+            roles = edited_user.get('roles')
+            roles.append('admin')
+            edited_user.set('roles', roles)
+        data[name] = edited_user.data
+        self.write(data)
 
     def get_user(self, name):
         users = self.read()
@@ -90,6 +110,7 @@ class User(object):
         self.manager = manager
         self.name = name
         self.data = data
+        self.admin = self.is_admin()
 
     def get(self, option):
         return self.data.get(option)
@@ -110,12 +131,18 @@ class User(object):
     def is_anonymous(self):
         return False
 
-    def active(self):
-        current_time = datetime.now().strftime("%H:%M%p %m/%d/%y")
-        self.set('last_active', current_time)
+    def is_admin(self):
+        roles = self.get_roles()
+        if "admin" in roles:
+            return True
+        else:
+            return False
 
     def get_id(self):
         return self.name
+
+    def get_roles(self):
+        return self.data.get("roles")
 
     def check_password(self, password):
         """Return True, return False, or raise NotImplementedError if the
