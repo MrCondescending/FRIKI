@@ -8,6 +8,7 @@
 		<thead>
 			<tr>
 				<th>Users</th>
+                <th>Roles</th>
 				<th>Last Active</th>
 			</tr>
 		</thead>
@@ -15,6 +16,7 @@
 			{% for user in users %}
                 <tr>
 					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
+                    <td>{{ user.get_roles() }}</td>
 					<td>{{ user.get("last_active") }}</td>
 				</tr>
 			{% endfor %}
