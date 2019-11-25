@@ -3,9 +3,9 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "1234",
-    "authenticated": false,
+    "authenticated": true,
     "roles": [],
-    "last_login": "00:00AM 11/21/19"
+    "last_active": "14:37PM 11/25/19"
   },
   "sam": {
     "active": true,
@@ -13,16 +13,16 @@
     "password": "1234",
     "authenticated": true,
     "roles": [],
-    "last_login": "00:00AM 11/21/19"
+    "last_active": "00:00AM 11/21/19"
   },
   "admin": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "admin",
-    "authenticated": true,
+    "authenticated": false,
     "roles": [
       "admin"
     ],
-    "last_login": "00:00AM 11/22/19"
+    "last_active": "11:57AM 11/25/19"
   }
 }

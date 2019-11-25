@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-import datetime
+
 
 from flask import Blueprint, current_app
 from flask import flash
@@ -23,6 +23,7 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+from datetime import datetime
 try:
     import forms
 except:
@@ -30,6 +31,14 @@ except:
 import user
 
 bp = Blueprint('wiki', __name__)
+
+
+@bp.before_request
+@protect
+def update_activity():
+        current_date = datetime.now().strftime("%I:%M%p %m/%d/%y")
+        current_user.set('authenticated', True)
+        current_user.set('last_active', current_date)
 
 
 @bp.route('/')
@@ -141,9 +150,6 @@ def user_login():
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
-        current_date = datetime.date.today().strftime("%H:%M%p %m/%d/%y")
-        user.set('authenticated', True)
-        user.set('last_login', current_date)
         flash('Login successful.', 'success')
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)

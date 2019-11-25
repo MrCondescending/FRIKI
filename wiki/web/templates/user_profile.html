@@ -7,20 +7,19 @@
 	<table class="table">
 		<thead>
 			<tr>
-                {% for index in user.data %}
-                    <th>{{ index }}</th>
-                {% endfor %}
-
-				<th>Last Active</th>
+                <th>Name</th>
+                <th>Roles</th>
+				<th>Last Login</th>
+                {{ user.data }}
 			</tr>
 		</thead>
 		<tbody>
-			{% for user in users %}
-                <tr>
-					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
-					<td><a href="{{ url_for('wiki.user_index', name=user.data.get("last_active")) }}">{{ user.name }}</a></td>
-				</tr>
-			{% endfor %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.data.roles }}</td>
+                <td>{{ user.data.last_active }}</td>
+
+            </tr>
 		</tbody>
 	</table>
 {% else %}
