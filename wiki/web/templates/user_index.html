@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}User Index{% endblock title %}
+
+{% block content %}
+{% if users %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Users</th>
+                <th>Roles</th>
+				<th>Last Active</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+                <tr>
+					<td><a href="{{ url_for('wiki.user_page', name=user.name) }}">{{ user.name }}</a></td>
+                    <td>{{ user.get_roles() }}</td>
+					<td>{{ user.get("last_active") }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>There are currently no users able to be listed.</p>
+{% endif %}
+{% endblock content %}
+
+

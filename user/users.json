@@ -1,0 +1,47 @@
+{
+  "name": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [],
+    "last_active": "04:50PM 11/25/19"
+  },
+  "sam": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [],
+    "last_active": "04:50PM 11/21/19"
+  },
+  "IamSam": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [
+      "Admin",
+      "test"
+    ],
+    "last_login": "04:55PM 11/21/19"
+  },
+  "rest": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "1234",
+    "authenticated": true,
+    "roles": [],
+    "last_login": "05:50PM 11/21/19"
+  },
+  "admin": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "admin",
+    "authenticated": true,
+    "roles": [
+      "admin"
+    ],
+    "last_active": "10:37AM 11/26/19"
+  }
+}
