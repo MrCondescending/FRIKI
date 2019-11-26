@@ -134,15 +134,56 @@ def tag(name):
     return render_template('tag.html', pages=tagged, tag=name)
 
 
-@bp.route('/search/', methods=['GET', 'POST'])
+@bp.route('/search/filter/', methods=['GET', 'POST'])
 @protect
-def search():
+def advanced_search():
     form = SearchForm()
     if form.validate_on_submit():
+        try:
+            re.compile(".*" + form.term.data, re.IGNORECASE)
+        except re.error:
+            return render_template('advanced_search.html', form=form, search=None, error=True)
+        if request.form.get('options') == "users":
+            users = current_users.get_all_users()
+            user = []
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in users:
+                if re.search(pattern, x.name) is not None:
+                    user.append(x)
+            return render_template('advanced_search.html', form=form, users=user, search=form.term.data)
+        elif request.form.get('options') == "tags":
+            tags = current_wiki.get_tags()
+            tag = []
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in tags:
+                if re.search(pattern, x) is not None:
+                    tag.append(x)
+            return render_template('advanced_search.html', form=form, tags=tag, search=form.term.data)
+        elif request.form.get('options') == "roles":
+            users = current_users.get_all_users()
+            roles = {}
+            if form.ignore_case.data:
+                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
+            else:
+                pattern = re.compile(".*" + form.term.data)
+            for x in users:
+                user_roles = x.get('roles')
+                for y in range(len(user_roles)):
+                    if re.search(pattern, user_roles[y]) is not None:
+                        roles.setdefault(x.name, [])
+                        roles[x.name].append(user_roles[y])
+            return render_template('advanced_search.html', form=form, search=form.term.data, roles=roles)
         results = current_wiki.search(form.term.data, form.ignore_case.data)
-        return render_template('search.html', form=form,
+        return render_template('advanced_search.html', form=form,
                                results=results, search=form.term.data)
-    return render_template('search.html', form=form, search=None)
+    return render_template('advanced_search.html', form=form, search=None)
+
 
 
 @bp.route('/user/login/', methods=['GET', 'POST'])
@@ -255,52 +296,3 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-    return render_template('advanced_search.html', form=form, search=None)
-                               results=results, search=form.term.data)
-        return render_template('advanced_search.html', form=form,
-        results = current_wiki.search(form.term.data, form.ignore_case.data)
-            return render_template('advanced_search.html', form=form, search=form.term.data, roles=roles)
-                        roles[x.name].append(user_roles[y])
-                        roles.setdefault(x.name, [])
-                    if re.search(pattern, user_roles[y]) is not None:
-                for y in range(len(user_roles)):
-                user_roles = x.get('roles')
-            for x in users:
-                pattern = re.compile(".*" + form.term.data)
-            else:
-                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
-            if form.ignore_case.data:
-            roles = {}
-            users = current_users.get_users()
-        elif request.form.get('options') == "roles":
-            return render_template('advanced_search.html', form=form, tags=tag, search=form.term.data)
-                    tag.append(x)
-                if re.search(pattern, x) is not None:
-            for x in tags:
-                pattern = re.compile(".*" + form.term.data)
-            else:
-                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
-            if form.ignore_case.data:
-            tag = []
-            tags = current_wiki.get_tags()
-        elif request.form.get('options') == "tags":
-            return render_template('advanced_search.html', form=form, users=user, search=form.term.data)
-                    user.append(x)
-                if re.search(pattern, x.name) is not None:
-            for x in users:
-def advanced_search():
-@protect
-@bp.route('/search/filter/', methods=['GET', 'POST'])
-    if form.validate_on_submit():
-    form = SearchForm()
-        try:
-            re.compile(".*" + form.term.data, re.IGNORECASE)
-        except re.error:
-            return render_template('advanced_search.html', form=form, search=None, error=True)
-        if request.form.get('options') == "users":
-            user = []
-            users = current_users.get_users()
-                pattern = re.compile(".*" + form.term.data, re.IGNORECASE)
-            if form.ignore_case.data:
-            else:
-                pattern = re.compile(".*" + form.term.data)
