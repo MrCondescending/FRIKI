@@ -21,6 +21,7 @@ from wiki.web.forms import EditorForm, UserCreateForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
 from wiki.web.forms import URLForm
+from wiki.web.forms import TagForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
@@ -42,7 +43,7 @@ def update_activity():
         current_user.set('last_active', current_date)
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @protect
 def home():
     page = current_wiki.get('home')
@@ -58,11 +59,24 @@ def index():
     return render_template('index.html', pages=pages)
 
 
-@bp.route('/<path:url>/')
+@bp.route('/<path:url>/', methods=['GET', 'POST'])
 @protect
 def display(url):
     page = current_wiki.get_or_404(url)
-    return render_template('page.html', page=page)
+    form = TagForm(obj=page)
+
+    if request.method =="POST":
+        newTags = request.form['newTags']
+
+        if page.tags == '':
+            page.tags = newTags
+        else:
+            page.tags = page.tags + ","+ newTags
+        page.tags = newTags
+        page.save()
+        return redirect(url_for('wiki.display', url=url))
+
+    return render_template('page.html', page=page, form=form)
 
 
 @bp.route('/create/', methods=['GET', 'POST'])
