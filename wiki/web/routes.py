@@ -121,17 +121,6 @@ def tag(name):
     return render_template('tag.html', pages=tagged, tag=name)
 
 
-@bp.route('/search/', methods=['GET', 'POST'])
-@protect
-def search():
-    form = SearchForm()
-    if form.validate_on_submit():
-        results = current_wiki.search(form.term.data, form.ignore_case.data)
-        return render_template('search.html', form=form,
-                               results=results, search=form.term.data)
-    return render_template('search.html', form=form, search=None)
-
-
 @bp.route('/search/filter/', methods=['GET', 'POST'])
 @protect
 def advanced_search():
